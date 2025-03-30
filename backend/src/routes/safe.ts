@@ -29,9 +29,10 @@ router.get("/user/:id", async (req: any, res: any) => {
   }
 });
 
+
 // Create /safe - Fetch all safes
 router.post("/create", async (req: any, res: any) => {
-  const { ownerId, text } = req.body as { ownerId: string; text: string };
+  const { ownerId, text, safeId } = req.body as { ownerId: string; text: string, safeId: string };
 
   if (!ownerId) {
     return res.status(400).json({ error: "ownerId is required" });
@@ -50,11 +51,18 @@ router.post("/create", async (req: any, res: any) => {
     // Create the safe
     const newSafe = await prisma.safe.create({
       data: {
-        id: crypto.randomUUID(), // Generate a unique ID for the safe
+        id: safeId, // Generate a unique ID for the safe
         ownerId, // Establish the relationship using the foreign key
         text: text, // Add the text field if provided
       },
     });
+
+	await prisma.user_Safe.create({
+		data: {
+			userId: ownerId,
+			safeId: newSafe.id,
+		},
+	});
 
     res.status(201).json({ safe: newSafe, owner });
   } catch (error) {
