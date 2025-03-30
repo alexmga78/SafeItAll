@@ -9,7 +9,7 @@ router.get("/user/:id", async (req: any, res: any) => {
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(id, 10) }, // Ensure the ID is parsed as an integer
+      where: { id: id }, // Ensure the ID is parsed as an integer
       include: {
         owned_safes: true, // Include safes owned by the user
         friend_safes: true, // Include safes the user has access to
@@ -77,9 +77,17 @@ router.get("/open", async (req: any, res: any) => {
   }
 
   try {
+
+    const access = await prisma.user_Safe.findMany({
+        where: {
+            userId: user_id,
+            safeId: safe_id,
+        },
+    })
+
     // Fetch the safe by safe_id
     const safe = await prisma.safe.findUnique({
-      where: { id: parseInt(safe_id, 10) }, // Ensure the ID is parsed as an integer
+      where: { id: safe_id }, // Ensure the ID is parsed as an integer
       include: {
         owner: true, // Include the owner of the safe
         access_users: true, // Include the users who have access to the safe
@@ -91,9 +99,9 @@ router.get("/open", async (req: any, res: any) => {
     }
 
     // Check if the user is the owner or has access to the safe
-    const isOwner = safe.ownerId === parseInt(user_id, 10);
+    const isOwner = safe.ownerId === user_id;
     const hasAccess = safe.access_users.some(
-      (user) => user.id === parseInt(user_id, 10)
+      (user) => user.userId === user_id
     );
 
     if (!isOwner && !hasAccess) {
@@ -154,21 +162,20 @@ router.post("/share-safe", async (req: any, res: any) => {
 
     // Check if the user already has access to the safe
     const userHasAccess = safe.access_users.some(
-      (accessUser) => accessUser.id === friendId
+      (accessUser) => accessUser.userId === friendId
     );
 
     // Check if the userID is the one that created the safe
     let updatedSafe;
     if (safe.ownerId === userId) {
       // Add the friend to the safe's access_users array
-      updatedSafe = await prisma.safe.update({
-        where: { id: safeId },
+      updatedSafe = await prisma.user_Safe.create({
         data: {
-          access_users: {
-            connect: { id: friendId },
-          },
+          userId: friendId!,
+          safeId: safeId,
         },
       });
+      
     } else {
       return res
         .status(403)
