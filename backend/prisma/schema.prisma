@@ -33,6 +33,7 @@ model Safe {
   access_users User_Safe[]
   
   text       String?
+  imageUrl   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

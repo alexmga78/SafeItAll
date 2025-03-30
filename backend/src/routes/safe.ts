@@ -1,26 +1,22 @@
 import { Router, Request, Response } from "express";
 import prisma from "../prisma/prisma";
-
+const cors = require("cors");
 const router = Router();
 
-// GET /user/:id - Fetch a user by ID
+
 router.get("/user/:id", async (req: any, res: any) => {
   const { id } = req.params; // Extract user ID from the route parameter
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: id }, // Ensure the ID is parsed as an integer
-      include: {
-        owned_safes: true, // Include safes owned by the user
-        friend_safes: true, // Include safes the user has access to
-      },
+    const safes = await prisma.safe.findMany({
+      where: { ownerId: id }, // Query by ownerId
     });
 
-    if (!user) {
+    if (!safes) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json(user);
+    res.status(200).json(safes);
   } catch (error) {
     console.error("Error fetching user:", error);
     res
@@ -54,6 +50,7 @@ router.post("/create", async (req: any, res: any) => {
         id: safeId, // Generate a unique ID for the safe
         ownerId, // Establish the relationship using the foreign key
         text: text, // Add the text field if provided
+        //imageUrl: imageUrl, // Add the imageUrl field if provided
       },
     });
 

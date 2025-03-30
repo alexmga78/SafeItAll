@@ -6,7 +6,7 @@ import cors from 'cors';
 const prisma = new PrismaClient()
 
 async function main() {
-	const app = express();
+  const app = express();
 
 	// Middleware to parse JSON bodies
 	app.use(cors());
@@ -34,10 +34,10 @@ async function main() {
 
 main()
   .then(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
