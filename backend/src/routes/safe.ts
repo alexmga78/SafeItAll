@@ -31,7 +31,7 @@ router.get("/user/:id", async (req: any, res: any) => {
 
 // Create /safe - Fetch all safes
 router.post("/create", async (req: any, res: any) => {
-  const { ownerId } = req.body as { ownerId: number };
+  const { ownerId } = req.body as { ownerId: string };
 
   if (!ownerId) {
     return res.status(400).json({ error: "ownerId is required" });
@@ -50,10 +50,8 @@ router.post("/create", async (req: any, res: any) => {
     // Create the safe
     const newSafe = await prisma.safe.create({
       data: {
+        id: crypto.randomUUID(), // Generate a unique ID for the safe
         ownerId, // Establish the relationship using the foreign key
-        access_users: {
-          connect: [], // Initialize with no additional users having access
-        },
       },
     });
 
@@ -77,17 +75,9 @@ router.get("/open", async (req: any, res: any) => {
   }
 
   try {
-
-    const access = await prisma.user_Safe.findMany({
-        where: {
-            userId: user_id,
-            safeId: safe_id,
-        },
-    })
-
     // Fetch the safe by safe_id
     const safe = await prisma.safe.findUnique({
-      where: { id: safe_id }, // Ensure the ID is parsed as an integer
+      where: { id: safe_id },
       include: {
         owner: true, // Include the owner of the safe
         access_users: true, // Include the users who have access to the safe
@@ -100,10 +90,14 @@ router.get("/open", async (req: any, res: any) => {
 
     // Check if the user is the owner or has access to the safe
     const isOwner = safe.ownerId === user_id;
-    const hasAccess = safe.access_users.some(
-      (user) => user.userId === user_id
-    );
+    // Check if the user has access to the safe
+    const query = `SELECT * FROM Hack.User_Safe WHERE safeId = "${safe_id}" AND userId = "${user_id}"`;
+    console.log(query);
 
+    const access:any = await prisma.$queryRawUnsafe(query);
+
+    const hasAccess = access.length > 0; // Now false if no records exist
+    console.log(access);
     if (!isOwner && !hasAccess) {
       return res
         .status(403)
@@ -122,9 +116,9 @@ router.get("/open", async (req: any, res: any) => {
 
 router.post("/share-safe", async (req: any, res: any) => {
   const { safeId, userId, friendId } = req.body as {
-    safeId: number;
-    userId: number;
-    friendId: number;
+    safeId: string;
+    userId: string;
+    friendId: string;
   };
 
   if (!safeId || !userId || !friendId) {
