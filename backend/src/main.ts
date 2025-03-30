@@ -1,5 +1,5 @@
 import express from "express";
-import userRoutes from "../routes/user";
+// import userRoutes from "../routes/user";
 
 import { PrismaClient } from '@prisma/client'
 
@@ -12,7 +12,7 @@ async function main() {
 	app.use(express.json());
 	
 	// Mount routes from the routes directory
-	app.use("/users", userRoutes);
+	// app.use("/users", userRoutes);
 	
 	const PORT = process.env.PORT || 3000;
 	
