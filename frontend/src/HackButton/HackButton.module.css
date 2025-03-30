@@ -1,0 +1,16 @@
+.hackBtn {
+	background-color: #5255165b !important;
+	border-radius: 16px !important;
+	font-weight: 700 !important;
+	padding: 0.6rem 0.9rem !important;
+	border: 1px solid #3f42105b !important;
+  }
+  
+.hackBtn:hover {
+	background-color: #44480f5b !important;
+  }
+  
+.hackBtn:active {
+	background-color: #4d510c5b;
+  }
+  

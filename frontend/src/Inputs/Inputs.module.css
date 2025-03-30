@@ -1,0 +1,114 @@
+.inputGroup {
+	padding: 1rem;
+  }
+  
+  .error {
+	padding: 0.75rem;
+	color: red;
+  }
+  
+  .popupForm .error {
+	text-align: center;
+  }
+  
+  /* Styling for popup forms */
+  
+  .checkboxGroup input {
+	height: 24px;
+	width: 24px;
+	border-radius: 6px !important;
+  }
+  
+  .checkboxGroup input:checked {
+	color: red !important;
+	background-color: red !important;
+  }
+  
+  .checkboxGroup label {
+	border-bottom: 0px !important;
+	margin: auto;
+	margin-left: 12px !important;
+	transform: none !important;
+	height: 2rem !important;
+  }
+  
+  .checkboxGroup span {
+	height: 100%;
+	border-bottom: 0px !important;
+  }
+  
+  .checkboxGroup :global .hstack {
+	height: 56px;
+  }
+  
+  .popupForm input,
+  .popupForm label,
+  .popupForm select {
+	font-size: 1.25rem;
+	color: white !important; /* because focussing on an input would change the color */
+	height: 3.5rem;
+	text-align: center !important;
+  
+	border-radius: 0;
+	border-width: 0;
+	border-bottom: medium solid white;
+  
+	background-color: rgba(0, 0, 0, 0) !important;
+	padding: 0rem !important; /* altfel atunci cand autcompleteul da highlight la camp va acoperi labelul */
+  }
+  
+  .popupForm option {
+	color: black !important;
+  }
+  
+  .popupForm input:focus,
+  .popupForm select:focus {
+	box-shadow: 0 0 0 0;
+	border-bottom: thick solid white;
+  }
+  
+  .popupForm :global .form-floating > label {
+	transform-origin: 50% 0 !important;
+  }
+  
+  .popupForm :global .form-floating > input:focus ~ label,
+  .popupForm :global .form-floating > input:not(:placeholder-shown) ~ label {
+	transform: scale(0.85) translateY(-1.75rem) !important;
+  }
+  
+  .popupForm select {
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="%23ffffff" d="M192 384c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L192 306.8l137.4-137.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-160 160C208.4 380.9 200.2 384 192 384z"/></svg>')
+	  right 1rem center/8px 10px no-repeat;
+  }
+  
+  .toggleBtn {
+	background-color: #ffffff !important;
+	color: #1d911d !important;
+	border: 1px solid #156b15 !important;
+	border-radius: 0.5rem !important;
+	font-weight: 700 !important;
+	padding: 0.6rem 0.9rem !important;
+	opacity: 100% !important;
+  }
+  
+  .toggleBtn:hover {
+	background-color: #cadeca !important;
+  }
+  
+  .toggleBtn:active {
+	background-color: #000000;
+  }
+  
+  .toggled {
+	background-color: #1d911d !important;
+	color: #ffffff !important;
+  }
+  
+  .toggled:hover {
+	background-color: #156b15 !important;
+  }
+  
+  .toggled:active {
+	background-color: #0f4d0f;
+  }
+  
