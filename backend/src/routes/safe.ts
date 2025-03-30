@@ -66,7 +66,7 @@ router.post("/create", async (req: any, res: any) => {
 });
 
 // GET /safe/:safe_id - Fetch a safe by its ID and check if the user has access or ownership
-router.get("/open", async (req: any, res: any) => {
+router.post("/open", async (req: any, res: any) => {
   const safe_id = req.body.safeId; // Extract safe ID from the route parameter
   const user_id = req.body.userId; // Extract user ID from the query parameters
 
