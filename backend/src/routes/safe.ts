@@ -92,7 +92,6 @@ router.get("/open", async (req: any, res: any) => {
     const isOwner = safe.ownerId === user_id;
     // Check if the user has access to the safe
     const query = `SELECT * FROM Hack.User_Safe WHERE safeId = "${safe_id}" AND userId = "${user_id}"`;
-    console.log(query);
 
     const access:any = await prisma.$queryRawUnsafe(query);
 
