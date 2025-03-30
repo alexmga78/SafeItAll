@@ -1,19 +1,21 @@
 import express from "express";
-// import userRoutes from "../routes/user";
 
 import { PrismaClient } from '@prisma/client'
 import safeRoutes from "./routes/safe";
+import cors from 'cors';
 const prisma = new PrismaClient()
 
 async function main() {
 	const app = express();
 
 	// Middleware to parse JSON bodies
+	app.use(cors());
+	app.options('*', cors()); // Handle preflight requests
 	app.use(express.json());
-	
+
 	// Mount routes from the routes directory
 	app.use("/safe", safeRoutes);
-	
+
 	const PORT = process.env.PORT || 3000;
 	
 	app.listen(PORT, async () => {

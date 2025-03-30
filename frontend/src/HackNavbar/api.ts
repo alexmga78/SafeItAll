@@ -4,11 +4,14 @@ const url = import.meta.env.VITE_API_URL;
 
 export interface CreateSafeRequest {
 	ownerId: string;
+	safeId: string;
 	text?: string;
 }
 
 export async function createSafe(data: CreateSafeRequest): Promise<void> {
-	await axios.post(`${url}/safe/create`, data);
+	console.log(data, `${url}/safe/create`);
+
+	await axios.post(`${url}/safe/create`, {...data});
 }
 
 export interface OpenSafeRequest {

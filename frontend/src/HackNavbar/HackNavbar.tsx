@@ -56,10 +56,11 @@ export default function HackNavbar() {
         show={showCreatePopup}
         handleClose={() => setShowCreatePopup(false)}>
         <Formik
-          initialValues={{ text: "" }}
+          initialValues={{ text: "", safe: "" }}
           onSubmit={(values) => {
             const data: CreateSafeRequest = {
               ownerId: username,
+              safeId: values.safe,
               text: values.text,
             };
             createSafe(data);
@@ -68,6 +69,12 @@ export default function HackNavbar() {
           {({ isSubmitting }) => (
             <Form>
               <Stack gap={3}>
+                <TextInput
+                  name="safe"
+                  type="text"
+                  label="Safe name"
+                  placeholder="Enter safe name"
+                />
                 <TextInput
                   name="text"
                   type="text"
@@ -99,13 +106,13 @@ export default function HackNavbar() {
             <Form>
               <Stack gap={3}>
                 <TextInput
-                  name="safeName"
+                  name="safe"
                   type="text"
                   label="The safe name"
                   placeholder="Enter the safe to share"
                 />
                 <TextInput
-                  name="friendName"
+                  name="friend"
                   type="text"
                   label="The friend name"
                   placeholder="Enter the friend to share with"
