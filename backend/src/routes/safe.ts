@@ -67,9 +67,9 @@ router.post("/create", async (req: any, res: any) => {
 });
 
 // GET /safe/:safe_id - Fetch a safe by its ID and check if the user has access or ownership
-router.get("/safe/:safe_id", async (req: any, res: any) => {
-  const { safe_id } = req.params; // Extract safe ID from the route parameter
-  const { user_id } = req.query; // Extract user ID from the query parameters
+router.get("/open", async (req: any, res: any) => {
+  const safe_id = req.body.safeId; // Extract safe ID from the route parameter
+  const user_id = req.body.userId; // Extract user ID from the query parameters
 
   // Check if user_id is provided
   if (!user_id) {
@@ -112,70 +112,74 @@ router.get("/safe/:safe_id", async (req: any, res: any) => {
   }
 });
 
+router.post("/share-safe", async (req: any, res: any) => {
+  const { safeId, userId, friendId } = req.body as {
+    safeId: number;
+    userId: number;
+    friendId: number;
+  };
 
-router.post('/share-safe', async (req: any, res: any) => {
-    const { safeId, userId, friendId } = req.body as { safeId: number; userId: number; friendId: number };
-  
-    if (!safeId || !userId || !friendId) {
-      return res.status(400).json({ error: "safeId and userId are required" });
+  if (!safeId || !userId || !friendId) {
+    return res.status(400).json({ error: "safeId and userId are required" });
+  }
+
+  try {
+    // Fetch the safe by safeId
+    const safe = await prisma.safe.findUnique({
+      where: { id: safeId },
+      include: { access_users: true },
+    });
+
+    if (!safe) {
+      return res.status(404).json({ error: "Safe not found" });
     }
-  
-    try {
-      // Fetch the safe by safeId
-      const safe = await prisma.safe.findUnique({
+
+    // Fetch the user by userId
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // ia-l si pe prieten
+    const friend = await prisma.user.findUnique({
+      where: { id: friendId },
+    });
+
+    if (!friend) {
+      return res.status(404).json({ error: "n-ai prieteni haha" });
+    }
+
+    // Check if the user already has access to the safe
+    const userHasAccess = safe.access_users.some(
+      (accessUser) => accessUser.id === friendId
+    );
+
+    // Check if the userID is the one that created the safe
+    let updatedSafe;
+    if (safe.ownerId === userId) {
+      // Add the friend to the safe's access_users array
+      updatedSafe = await prisma.safe.update({
         where: { id: safeId },
-        include: { access_users: true },
+        data: {
+          access_users: {
+            connect: { id: friendId },
+          },
+        },
       });
-  
-      if (!safe) {
-        return res.status(404).json({ error: "Safe not found" });
-      }
-  
-      // Fetch the user by userId
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-      });
-  
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      // ia-l si pe prieten
-      const friend = await prisma.user.findUnique({
-        where: { id: friendId }, 
-      })
-
-      if (!friend) {
-        return res.status(404).json({ error: "n-ai prieteni haha" });
-      }
-  
-      // Check if the user already has access to the safe
-      const userHasAccess = safe.access_users.some((accessUser) => accessUser.id === friendId);
-  
-      // Check if the userID is the one that created the safe
-      let updatedSafe;
-      if (safe.ownerId === userId) {
-          // Add the friend to the safe's access_users array
-          updatedSafe = await prisma.safe.update({
-              where: { id: safeId },
-              data: {
-                  access_users: {
-                      connect: { id: friendId },
-                  },
-              },
-          });
-      } else {
-          return res.status(403).json({ error: "You are not the owner of the safe" });
-      }
-  
-      res.status(200).json(updatedSafe);
-    } catch (error) {
-      console.error("Error sharing safe:", error);
-      res.status(500).json({ error: "An error occurred while sharing the safe" });
+    } else {
+      return res
+        .status(403)
+        .json({ error: "You are not the owner of the safe" });
     }
-  });
 
-
+    res.status(200).json(updatedSafe);
+  } catch (error) {
+    console.error("Error sharing safe:", error);
+    res.status(500).json({ error: "An error occurred while sharing the safe" });
+  }
+});
 
 export default router;
-
