@@ -31,7 +31,7 @@ router.get("/user/:id", async (req: any, res: any) => {
 
 // Create /safe - Fetch all safes
 router.post("/create", async (req: any, res: any) => {
-  const { ownerId } = req.body as { ownerId: string };
+  const { ownerId, text } = req.body as { ownerId: string; text: string };
 
   if (!ownerId) {
     return res.status(400).json({ error: "ownerId is required" });
@@ -52,6 +52,7 @@ router.post("/create", async (req: any, res: any) => {
       data: {
         id: crypto.randomUUID(), // Generate a unique ID for the safe
         ownerId, // Establish the relationship using the foreign key
+        text: text, // Add the text field if provided
       },
     });
 
