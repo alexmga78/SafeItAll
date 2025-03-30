@@ -2,7 +2,7 @@ import express from "express";
 // import userRoutes from "../routes/user";
 
 import { PrismaClient } from '@prisma/client'
-
+import safeRoutes from "./routes/safe";
 const prisma = new PrismaClient()
 
 async function main() {
@@ -12,11 +12,12 @@ async function main() {
 	app.use(express.json());
 	
 	// Mount routes from the routes directory
-	// app.use("/users", userRoutes);
+	app.use("/safe", safeRoutes);
 	
 	const PORT = process.env.PORT || 3000;
 	
 	app.listen(PORT, async () => {
+
 	  console.log(`Server is running on port ${PORT}`);
 	  try {
 		// Test the database connection
