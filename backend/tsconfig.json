@@ -10,7 +10,7 @@
     "include": [
       "./*.ts",  // Include all .ts files in the root directory
       "routes/**/*.ts" // Also include any TypeScript files inside routes/
-    ],
+, "src/main.ts"    ],
     "exclude": [
       "node_modules"
     ]

@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import userRoutes from "./routes/user";
+import userRoutes from "../routes/user";
 
 const app = express();
 const prisma = new PrismaClient();
