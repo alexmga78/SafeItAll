@@ -126,6 +126,7 @@ router.post("/share-safe", async (req: any, res: any) => {
     friendId: string;
   };
 
+  console.log(req.body);
   if (!safeId || !userId || !friendId) {
     return res.status(400).json({ error: "safeId and userId are required" });
   }

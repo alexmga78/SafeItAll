@@ -8,6 +8,7 @@ import Popup from "../Popup/Popup";
 import { Form, Formik } from "formik";
 import { CreateSafeRequest, openSafe, OpenSafeRequest } from "../HackNavbar/api";
 import { TextInput } from "../Inputs/Inputs";
+import DarkRoomEffect from "../DarkRoomEffect/DarkRoomEffect";
 
 export default function Home() {
   interface Safe {
@@ -44,6 +45,7 @@ export default function Home() {
   }, [location.hash]);
 
   return (
+    <DarkRoomEffect>
     <Stack gap={3} className="min-vh-100">
       <HackNavbar />
 
@@ -101,5 +103,6 @@ export default function Home() {
         </Formik>
       </Popup>
     </Stack>
+    </DarkRoomEffect>
   );
 }
