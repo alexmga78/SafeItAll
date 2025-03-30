@@ -94,8 +94,8 @@ export default function HackNavbar() {
 			{({ isSubmitting }) => (
 				<Form>
 				<Stack gap={3}>
-					<TextInput name="safeName" type="text" label="The safe name" placeholder="Enter the safe to share" />
-					<TextInput name="friendName" type="text" label="The friend name" placeholder="Enter the friend to share with" />
+					<TextInput name="safe" type="text" label="The safe name" placeholder="Enter the safe to share" />
+					<TextInput name="friend" type="text" label="The friend name" placeholder="Enter the friend to share with" />
 					<HackButton variant="white" type="submit" >Submit</HackButton>
 				</Stack>
 				</Form>
