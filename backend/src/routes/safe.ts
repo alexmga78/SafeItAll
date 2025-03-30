@@ -8,9 +8,18 @@ router.get("/user/:id", async (req: any, res: any) => {
   const { id } = req.params; // Extract user ID from the route parameter
 
   try {
-    const safes = await prisma.safe.findMany({
-      where: { ownerId: id }, // Query by ownerId
-    });
+	const allowedSafes = await prisma.user_Safe.findMany({
+		where: { userId: id },
+	});
+	console.log(allowedSafes);
+	const safeIds = allowedSafes.map((userSafe) => userSafe.safeId);
+	const safes = await prisma.safe.findMany({
+		where: {
+			id: {
+				in: safeIds,
+			},
+		},
+	});
 
     if (!safes) {
       return res.status(404).json({ error: "User not found" });
@@ -97,12 +106,12 @@ router.post("/open", async (req: any, res: any) => {
     // Check if the user is the owner or has access to the safe
     const isOwner = safe.ownerId === user_id;
     // Check if the user has access to the safe
-    const query = `SELECT * FROM Hack.User_Safe WHERE safeId = "${safe_id}" AND userId = "${user_id}"`;
+    const query = `SELECT * FROM \`hack-intern-2025\`.User_Safe WHERE safeId = "${safe_id}" AND userId = "${user_id}"`;
+	console.log(query);
 
     const access:any = await prisma.$queryRawUnsafe(query);
 
     const hasAccess = access.length > 0; // Now false if no records exist
-    console.log(access);
     if (!isOwner && !hasAccess) {
       return res
         .status(403)
@@ -159,11 +168,6 @@ router.post("/share-safe", async (req: any, res: any) => {
     if (!friend) {
       return res.status(404).json({ error: "n-ai prieteni haha" });
     }
-
-    // Check if the user already has access to the safe
-    const userHasAccess = safe.access_users.some(
-      (accessUser) => accessUser.userId === friendId
-    );
 
     // Check if the userID is the one that created the safe
     let updatedSafe;

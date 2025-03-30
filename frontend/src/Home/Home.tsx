@@ -9,6 +9,7 @@ import { Form, Formik } from "formik";
 import { CreateSafeRequest, openSafe, OpenSafeRequest } from "../HackNavbar/api";
 import { TextInput } from "../Inputs/Inputs";
 import DarkRoomEffect from "../DarkRoomEffect/DarkRoomEffect";
+import Swal from "sweetalert2";
 
 export default function Home() {
   interface Safe {
@@ -60,11 +61,7 @@ export default function Home() {
                 className="w-50"
               />
               <Card.Body>
-                {/* <Card.Text className="text-muted">
-                  {safe.text || "Try to open me!"}
-                </Card.Text> */
-                <HackButton variant="white" onClick={() => setPopup(true)}>Try to open me!</HackButton>}
-
+                <HackButton variant="white" onClick={() => setPopup(true)}>Try to open me!</HackButton>
               </Card.Body>
             </Card>
           </Col>
@@ -82,12 +79,24 @@ export default function Home() {
         <Popup show={popup} handleClose={() => setPopup(false)}>
       <Formik
         initialValues={{ userName: "", safe: "" }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           const data: OpenSafeRequest = {
             userId: values.userName,
             safeId: values.safe,
           };
-          openSafe(data);
+          const res: any = await openSafe(data);
+		  console.log(res);
+		  if (!res.error) {
+			Swal.fire({
+				title: `${res.ownerId} este incantat de ${res.text}`,
+				icon: "success",
+			});
+		  } else {
+			Swal.fire({
+				title: "N-ai voie",
+				icon: "error",
+			});
+		  }
           setPopup(false);
         }}
         >

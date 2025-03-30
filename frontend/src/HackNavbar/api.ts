@@ -20,7 +20,8 @@ export interface OpenSafeRequest {
 }
 
 export async function openSafe(data: OpenSafeRequest): Promise<void> {
-	await axios.post(`${url}/safe/open`, data);
+	const res = await axios.post(`${url}/safe/open`, data);
+	return res.data;
 }
 
 export interface ShareSafeRequest {

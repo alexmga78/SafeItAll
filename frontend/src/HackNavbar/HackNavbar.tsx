@@ -12,6 +12,7 @@ import {
   ShareSafeRequest,
 } from "./api";
 import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 // Navbarul de aici: https://www.figma.com/file/SWHby6nl2RlaGnOwxRJSDd/Site?node-id=4%3A203&t=p7XhMdgcGVD24ZCi-0
 export default function HackNavbar() {
@@ -64,6 +65,10 @@ export default function HackNavbar() {
               text: values.text,
             };
             createSafe(data);
+			Swal.fire({
+				title: `Bravo ba ${username}, ti-ai facut un seif`,
+				icon: "success",
+			});
             setShowCreatePopup(false);
           }}>
           {({ isSubmitting }) => (
@@ -100,6 +105,10 @@ export default function HackNavbar() {
               friendId: values.friend,
             };
             shareSafe(data);
+			Swal.fire({
+				title: `Acum ${values.friend} are access la seif`,
+				icon: "success",
+			});
             setShowSharePopup(false);
           }}>
           {({ isSubmitting }) => (
