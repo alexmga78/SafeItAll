@@ -1,5 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+import userRoutes from './routes/user';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -7,30 +8,12 @@ const prisma = new PrismaClient();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// A sample route to fetch all users
-app.get('/users', async (req: any, res: any) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'An error occurred while fetching users' });
-  }
-});
+// Mount routes from the routes directory
+app.use('/users', userRoutes);
 
-// Another example route for creating a user (assuming your Prisma schema has a "User" model)
-app.post('/users', async (req, res) => {
-  const { name, email } = req.body;
-  try {
-    const newUser = await prisma.user.create({
-      data: { name, email },
-    });
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'An error occurred while creating user' });
-  }
-});
+// You can similarly mount other route groups:
+// app.use('/products', productRoutes);
+// app.use('/orders', orderRoutes);
 
 const PORT = process.env.PORT || 3000;
 
