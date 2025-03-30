@@ -37,10 +37,22 @@ export default function HackNavbar() {
           <Navbar.Collapse className="justify-content-end">
             <Nav className="align-items-center text-center">
               <Nav.Link className="mx-2" href="/#alex">
-                alex
+				cosmin
               </Nav.Link>
               <Nav.Link className="mx-2" href="/#alin">
-                alin
+                alex
+              </Nav.Link>
+              <Nav.Link className="mx-2" href="/#alex">
+                mirzea
+              </Nav.Link>
+              <Nav.Link className="mx-2" href="/#alin">
+				eusus
+              </Nav.Link>
+              <Nav.Link className="mx-2" href="/#alex">
+                croicisea
+              </Nav.Link>
+              <Nav.Link className="mx-2" href="/#alin">
+                bulgaras
               </Nav.Link>
               <Button className="m-2" onClick={() => setShowCreatePopup(true)}>
                 Create Safe
