@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 app.use(express.json());
 
 // A sample route to fetch all users
-app.get('/users', async (req, res) => {
+app.get('/users', async (req: any, res: any) => {
   try {
     const users = await prisma.user.findMany();
     res.json(users);
