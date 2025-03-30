@@ -19,7 +19,7 @@ export interface OpenSafeRequest {
 	userId: string;
 }
 
-export async function openSafe(data: OpenSafeRequest): Promise<void> {
+export async function openSafe(data: OpenSafeRequest): Promise<any> {
 	const res = await axios.post(`${url}/safe/open`, data);
 	return res.data;
 }
@@ -30,6 +30,7 @@ export interface ShareSafeRequest {
 	friendId: string;
 }
 
-export async function shareSafe(data: ShareSafeRequest): Promise<void> {
-	await axios.post(`${url}/safe/share-safe`, data);
+export async function shareSafe(data: ShareSafeRequest): Promise<any> {
+	const res = await axios.post(`${url}/safe/share-safe`, data);
+	return res.data;
 }

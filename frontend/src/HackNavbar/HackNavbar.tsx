@@ -36,22 +36,22 @@ export default function HackNavbar() {
 
           <Navbar.Collapse className="justify-content-end">
             <Nav className="align-items-center text-center">
-              <Nav.Link className="mx-2" href="/#alex">
+              <Nav.Link className="mx-2" href="/#cosmin">
 				cosmin
               </Nav.Link>
-              <Nav.Link className="mx-2" href="/#alin">
+              <Nav.Link className="mx-2" href="/#alex">
                 alex
               </Nav.Link>
-              <Nav.Link className="mx-2" href="/#alex">
+              <Nav.Link className="mx-2" href="/#mirzea">
                 mirzea
               </Nav.Link>
-              <Nav.Link className="mx-2" href="/#alin">
+              <Nav.Link className="mx-2" href="/#eusus">
 				eusus
               </Nav.Link>
-              <Nav.Link className="mx-2" href="/#alex">
+              <Nav.Link className="mx-2" href="/#croicisea">
                 croicisea
               </Nav.Link>
-              <Nav.Link className="mx-2" href="/#alin">
+              <Nav.Link className="mx-2" href="/#bulgaras">
                 bulgaras
               </Nav.Link>
               <Button className="m-2" onClick={() => setShowCreatePopup(true)}>
@@ -110,17 +110,24 @@ export default function HackNavbar() {
       <Popup show={showSharePopup} handleClose={() => setShowSharePopup(false)}>
         <Formik
           initialValues={{ safe: "", friend: "" }}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             const data: ShareSafeRequest = {
               userId: username,
               safeId: values.safe,
               friendId: values.friend,
             };
-            shareSafe(data);
-			Swal.fire({
-				title: `Acum ${values.friend} are access la seif`,
-				icon: "success",
-			});
+			try {
+				await shareSafe(data);
+				Swal.fire({
+					title: `Acum ${values.friend} are access la seif`,
+					icon: "success",
+				});
+			} catch(err) {
+				Swal.fire({
+					title: "N-ai voie",
+					icon: "error",
+				});
+			}
             setShowSharePopup(false);
           }}>
           {({ isSubmitting }) => (

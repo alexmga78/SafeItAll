@@ -1,6 +1,5 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import prisma from "../prisma/prisma";
-const cors = require("cors");
 const router = Router();
 
 
@@ -106,7 +105,7 @@ router.post("/open", async (req: any, res: any) => {
     // Check if the user is the owner or has access to the safe
     const isOwner = safe.ownerId === user_id;
     // Check if the user has access to the safe
-    const query = `SELECT * FROM \`hack-intern-2025\`.User_Safe WHERE safeId = "${safe_id}" AND userId = "${user_id}"`;
+    const query = `SELECT * FROM Hack.User_Safe WHERE safeId = "${safe_id}" AND userId = "${user_id}"`;
 	console.log(query);
 
     const access:any = await prisma.$queryRawUnsafe(query);

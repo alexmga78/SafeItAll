@@ -15,6 +15,7 @@ export default function Home() {
   interface Safe {
     id: string;
     text: string;
+	ownerId: string;
   }
 
   const [safes, setSafes] = useState<Safe[]>([]);
@@ -53,15 +54,18 @@ export default function Home() {
       <Row className="g-4 p-4">
         {safes.map((safe) => (
           <Col key={safe.id} xs={12} md={6} lg={4} xl={3}>
-            <Card className="h-100 shadow justify-content-center align-items-center">
+            <Card className="p-4 h-100 shadow justify-content-center align-items-center">
+				<Card.Title className="fs-1">
+					{`${safe.ownerId} | ${safe.id}`}
+				</Card.Title>
               <Card.Img
                 variant="top"
                 src="/safe.png"
                 alt={`Safe ${safe.id}`}
-                className="w-50"
+                className="w-75"
               />
               <Card.Body>
-                <HackButton variant="white" onClick={() => setPopup(true)}>Try to open me!</HackButton>
+                <HackButton className="fs-4" variant="white" onClick={() => setPopup(true)}>Try to open me!</HackButton>
               </Card.Body>
             </Card>
           </Col>
@@ -84,19 +88,19 @@ export default function Home() {
             userId: values.userName,
             safeId: values.safe,
           };
-          const res: any = await openSafe(data);
-		  console.log(res);
-		  if (!res.error) {
+		  try {
+			const res: any = await openSafe(data);
 			Swal.fire({
-				title: `${res.ownerId} este incantat de ${res.text}`,
+				title: `${res.text}`,
 				icon: "success",
 			});
-		  } else {
+
+		} catch (err) {
 			Swal.fire({
 				title: "N-ai voie",
 				icon: "error",
 			});
-		  }
+		  } 
           setPopup(false);
         }}
         >
